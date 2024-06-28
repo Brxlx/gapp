@@ -16,6 +16,7 @@ export class UniqueEntityID {
   }
 
   constructor(value?: string) {
+    if (value && value?.length > 21) throw new Error('Invalid id size');
     this.value = value ?? this.generateId();
   }
 

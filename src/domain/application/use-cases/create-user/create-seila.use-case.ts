@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { SeiLa } from '@/domain/enterprise/entities/seila';
 
 import { SeilaRepository } from '../../repositories/seila.repository';
@@ -14,10 +15,14 @@ type CreateSeiLaResponse = {
 export class CreateSeiLaUseCase {
   constructor(private readonly seilaRepository: SeilaRepository) {}
 
-  public async execute({ name }: CreateSeiLaRequest): Promise<CreateSeiLaResponse> {
-    const seiLa = SeiLa.create({ name });
+  public async execute(
+    { name }: CreateSeiLaRequest,
+    id?: UniqueEntityID
+  ): Promise<CreateSeiLaResponse> {
+    const seiLa = SeiLa.create({ name }, id);
 
     const ret = await this.seilaRepository.create(seiLa);
+
     if (!ret?.id) throw new Error('Unable to create entity');
 
     return { seiLa: ret };
