@@ -21,7 +21,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "types": [],
+    "types": [
+      // "vitest/globals"
+    ],
     "paths": {
       "@/*": [
         "./src/*"
