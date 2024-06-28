@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
 
+import { InvalidIdError } from '@/domain/application/use-cases/errors/invalid-id';
+
 export class UniqueEntityID {
   private value: string;
 
@@ -16,7 +18,7 @@ export class UniqueEntityID {
   }
 
   constructor(value?: string) {
-    if (value && value?.length > 21) throw new Error('Invalid id size');
+    if (value && value?.length > 21) throw new InvalidIdError();
     this.value = value ?? this.generateId();
   }
 

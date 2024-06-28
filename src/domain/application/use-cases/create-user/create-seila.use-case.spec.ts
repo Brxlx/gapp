@@ -3,6 +3,7 @@ import { InMemorySeilaRepository } from 'test/repositories/in-memory-seila.repos
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
+import { InvalidIdError } from '../errors/invalid-id';
 import { CreateSeiLaUseCase } from './create-seila.use-case';
 
 let inMemorySeiLaRepository: InMemorySeilaRepository;
@@ -49,6 +50,6 @@ describe('[SeiLa] Create', () => {
         { name: 'Brunão da Massa' },
         new UniqueEntityID('id-12345678901012323243545644')
       );
-    }).rejects.toThrowError('Invalid id size');
+    }).rejects.toThrowError(new InvalidIdError());
   });
 });
