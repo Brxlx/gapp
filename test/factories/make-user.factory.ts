@@ -1,12 +1,14 @@
 import { faker } from '@faker-js/faker';
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { SeiLa, SeiLaProps } from '@/domain/enterprise/entities/seila';
+import { User, UserProps } from '@/domain/enterprise/entities/user';
 
-export async function makeSeiLa(override: Partial<SeiLaProps> = {}, id?: UniqueEntityID) {
-  return SeiLa.create(
+export async function makeUser(override: Partial<UserProps> = {}, id?: UniqueEntityID) {
+  return User.create(
     {
       name: faker.person.fullName(),
+      email: faker.internet.email(),
+      password: faker.internet.password({ length: 8 }),
       ...override,
     },
     id
