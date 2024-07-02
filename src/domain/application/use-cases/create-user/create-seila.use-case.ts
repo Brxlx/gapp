@@ -7,9 +7,7 @@ interface CreateSeiLaRequest {
   name: string;
 }
 
-type CreateSeiLaResponse = {
-  seiLa: SeiLa;
-};
+type CreateSeiLaResponse = void;
 
 // @Injectable()
 export class CreateSeiLaUseCase {
@@ -21,10 +19,6 @@ export class CreateSeiLaUseCase {
   ): Promise<CreateSeiLaResponse> {
     const seiLa = SeiLa.create({ name }, id);
 
-    const ret = await this.seilaRepository.create(seiLa);
-
-    if (!ret?.id) throw new Error('Unable to create entity');
-
-    return { seiLa: ret };
+    await this.seilaRepository.create(seiLa);
   }
 }
