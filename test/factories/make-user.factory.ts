@@ -8,6 +8,7 @@ export async function makeUser(override: Partial<UserProps> = {}, id?: UniqueEnt
     {
       name: faker.person.fullName(),
       email: faker.internet.email().toLocaleLowerCase(),
+      nickname: faker.internet.userName(),
       password: faker.internet.password({ length: 8 }),
       ...override,
     },

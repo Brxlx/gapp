@@ -3,7 +3,9 @@ import { InMemoryUsersRepository } from 'test/repositories/in-memory-user.reposi
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
+import { EmptyPasswordError } from '../errors/empty-password';
 import { InvalidIdError } from '../errors/invalid-id';
+import { TooShortPasswordError } from '../errors/too-short-password';
 import { CreateUserUseCase } from './create-user.use-case';
 
 let inMemoryUserRepository: InMemoryUsersRepository;
@@ -11,7 +13,7 @@ let inMemoryUserRepository: InMemoryUsersRepository;
 // System Under Test
 let sut: CreateUserUseCase;
 
-describe('[user] Test Suit', () => {
+describe('[User] Test Suit', () => {
   suite('[Create] User', () => {
     beforeEach(() => {
       inMemoryUserRepository = new InMemoryUsersRepository();
@@ -37,7 +39,10 @@ describe('[user] Test Suit', () => {
     });
 
     it('should be able to create a new User with specific id', async () => {
-      const newUser = await makeUser({ name: 'Brunão da Massa' }, new UniqueEntityID('id-1'));
+      const newUser = await makeUser(
+        { name: 'Brunão da Massa', email: 'bruno@emei.com' },
+        new UniqueEntityID('id-1')
+      );
 
       await inMemoryUserRepository.create(newUser);
 
@@ -58,6 +63,28 @@ describe('[user] Test Suit', () => {
           new UniqueEntityID('id-12345678901012323243545644')
         );
       }).rejects.toThrowError(new InvalidIdError());
+    });
+
+    it('should not be able to create a new User with password shorten than 8 chars', async () => {
+      const user = await makeUser({
+        name: 'Bruno B',
+        email: 'brunob@emei.com',
+        password: '1234567',
+      });
+      expect(async () => {
+        await sut.execute(user);
+      }).rejects.toThrowError(new TooShortPasswordError());
+    });
+
+    it('should not be able to create a new User without password', async () => {
+      const user = await makeUser({
+        name: 'Bruno B',
+        email: 'brunob@emei.com',
+        password: undefined,
+      });
+      expect(async () => {
+        await sut.execute(user);
+      }).rejects.toThrowError(new EmptyPasswordError());
     });
   });
 });
