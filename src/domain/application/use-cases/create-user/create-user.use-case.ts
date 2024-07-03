@@ -20,6 +20,9 @@ export class CreateUserUseCase {
     { name, email, nickname, password }: CreateUserRequest,
     id?: UniqueEntityID
   ): Promise<CreateUserResponse> {
+    const userInDb = await this.usersRepository.findByNickname(nickname);
+    if (userInDb) throw new Error('User with same nickname already exists');
+
     const user = User.create({ name, email, nickname, password }, id);
 
     // To get into setter and validate/modificate data
